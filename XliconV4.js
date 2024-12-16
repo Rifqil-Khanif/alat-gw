@@ -15093,15 +15093,21 @@ break
 
 case 'menu': {
   try {
-      const createImage = async (url) => {
-          const { imageMessage } = await baileys.generateWAMessageContent({
-              image: { url }
-          }, {
-              upload: XliconBotInc.waUploadToServer
-          });
-          return imageMessage;
-      };
+    const isGroup = m.isGroup
+    const groupName = isGroup ? groupMetadata.subject : ''
+    const groupMembers = isGroup ? groupMetadata.participants.length : 0
+    const groupAdmins = isGroup ? getGroupAdmins(groupMetadata.participants) : []
+    const isBotAdmin = isGroup ? groupAdmins.includes(botNumber) : false
+    const isAdmin = isGroup ? groupAdmins.includes(m.sender) : false
 
+    const createImage = async (url) => {
+      const { imageMessage } = await baileys.generateWAMessageContent({
+        image: { url }
+      }, {
+        upload: XliconBotInc.waUploadToServer
+      });
+      return imageMessage;
+    };
 
         async function pinterest(query) {
             let res = await fetch(`https://www.pinterest.com/resource/BaseSearchResource/get/?source_url=%2Fsearch%2Fpins%2F%3Fq%3D${query}&data=%7B%22options%22%3A%7B%22isPrefetch%22%3Afalse%2C%22query%22%3A%22${query}%22%2C%22scope%22%3A%22pins%22%2C%22no_fetch_context_on_resource%22%3Afalse%7D%2C%22context%22%3A%7B%7D%7D&_=1619980301559`);
