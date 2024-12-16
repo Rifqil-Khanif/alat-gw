@@ -187,46 +187,51 @@ async function startXliconBot() {
         }
     });
 
- // Auto-Welcome and Auto-Bye Feature with Thumbnail and Image Link
+// Auto-Welcome and Auto-Bye Feature with API-generated images
 XliconBotInc.ev.on('group-participants.update', async (update) => {
-    const { id, participants } = update;
+    const { id, participants, action } = update;
     for (let participant of participants) {
-        const isWelcome = update.action === 'add';
-        const isBye = update.action === 'remove';
-
         try {
-            // Cek foto profil user atau gunakan thumbnail dari website
-            let userProfilePic = await XliconBotInc.profilePictureUrl(participant, 'image').catch(() => null);
-            let fallbackPic = 'https://tse4.mm.bing.net/th?id=OIP.JjURR9U0gcrqneGYVyG27wHaEn&pid=Api&P=0&h=180'; // Thumbnail default
-            let picture = userProfilePic || fallbackPic;
+            const groupMetadata = await XliconBotInc.groupMetadata(id);
+            const groupName = groupMetadata.subject;
+            const groupDesc = groupMetadata.desc || "No description available";
+            const participantName = participant.split('@')[0];
+            const memberCount = groupMetadata.participants.length;
 
-            if (isWelcome) {
-                // Pesan Selamat Datang
-                const groupDescription = `📢 *Deskripsi Grup*\nSelamat datang di grup *Wisata Bermain* 🍻 💫👽\n\nDi sini kami berharap semua anggota aktif dan saling mendukung satu sama lain. Jangan lupa untuk mematuhi peraturan grup demi kenyamanan bersama.\n\n⚠️ *PERHATIAN* ⚠️\n- Dilarang menyebar link selain dari admin\n- Dilarang keras mengemis di grup\n- Dilarang promosi barang tanpa izin\n- Hindari topik SARA/anarkis\n\nMari ciptakan suasana yang nyaman untuk kita semua! 🍻`;
+            // Get profile pictures
+            const ppGroup = await XliconBotInc.profilePictureUrl(id, 'image').catch(() => 'https://tse4.mm.bing.net/th?id=OIP.JjURR9U0gcrqneGYVyG27wHaEn&pid=Api&P=0&h=180');
+            const ppUser = await XliconBotInc.profilePictureUrl(participant, 'image').catch(() => 'https://tse4.mm.bing.net/th?id=OIP.JjURR9U0gcrqneGYVyG27wHaEn&pid=Api&P=0&h=180');
 
-                const promotionText = `\n\n🌟 *Teks Promosi* 🌟\n\nꜱɪᴛᴜꜱ ꜱʟᴏᴛ ʙᴇʀʟɪꜱᴇɴꜱɪ ʀᴇꜱᴍɪ ᴛᴀʜᴜɴ 2024 ᴅᴇɴɢᴀɴ ʀᴛᴘ ᴛᴇʀʙᴇꜱᴀʀ 98.91%, ᴛᴇʀʙᴜᴋᴛɪ ᴀɴᴛɪ ʀᴜɴɢᴋᴀᴅ ᴅᴀɴ ᴡᴅ ʙᴇʀᴀᴘᴀᴘᴜɴ ʟᴀɴɢꜱᴜɴɢ ʟᴜɴᴀꜱ!\n\nKlik link berikut untuk info lebih lanjut: https://regalbetx.net/eiol\n\n💯ꜱᴀʟᴀᴍ ᴘᴇᴊᴜᴀɴɢ ᴍᴀxᴡɪɴ 🔥🔥🔥`;
+            // Background image URL (you can change this to any image URL you prefer)
+            const bgImage = 'https://images3.alphacoders.com/131/thumbbig-1319293.webp';
 
-                const welcomeText = `${groupDescription}${promotionText}`;
-                const imageBuffer = await getBuffer(picture);
+            if (action === 'add') {
+                // Welcome message
+                const welcomeText = `HALO @${participantName} selamat datang di grup ${groupName} semoga betah dan jangan lupa patuhi DESKRIPSI\n\nDESKRIPSI:\n${groupDesc}\n\nHELLO @${participantName} welcome to the group ${groupName} hope you feel at home and don't forget to follow the DESCRIPTION`;
 
-                // Kirim gambar + teks welcome
+                // Generate welcome image using the API
+                const welcomeImageUrl = `https://btch.us.kg/welcome3?name=${encodeURIComponent(participantName)}&gcname=${encodeURIComponent(groupName)}&ppgc=${encodeURIComponent(ppGroup)}&member=${encodeURIComponent(memberCount)}&pp=${encodeURIComponent(ppUser)}&bg=${encodeURIComponent(bgImage)}`;
+
+                // Send the welcome message with the generated image
                 await XliconBotInc.sendMessage(id, {
-                    image: imageBuffer,
+                    image: { url: welcomeImageUrl },
                     caption: welcomeText,
-                    mentions: [participant],
+                    mentions: [participant]
                 });
-            }
-
-            if (isBye) {
-                // Pesan Selamat Tinggal
-                const goodbyeText = `📢 *Pesan Perpisahan*\n\nTerima kasih telah menjadi bagian dari grup *Wisata Bermain*. Semoga sukses selalu, dan jangan lupa untuk kembali kapan pun Anda mau! 🍻\n\nTetap semangat dan sukses selalu! 🔥`;
-                const imageBuffer = await getBuffer(picture);
-
-                // Kirim gambar + teks goodbye
+            } else if (action === 'remove') {
+                // Goodbye message
+                const goodbyeText = `BYE @${participantName} 👋`;
+            
+                // Use the user's profile picture or the default image
+                const goodbyeImageUrl = ppUser !== 'https://tse4.mm.bing.net/th?id=OIP.JjURR9U0gcrqneGYVyG27wHaEn&pid=Api&P=0&h=180' 
+                    ? ppUser 
+                    : 'https://images3.alphacoders.com/131/thumbbig-1319293.webp';
+            
+                // Send the goodbye message with the profile picture or default image
                 await XliconBotInc.sendMessage(id, {
-                    image: imageBuffer,
+                    image: { url: goodbyeImageUrl },
                     caption: goodbyeText,
-                    mentions: [participant],
+                    mentions: [participant]
                 });
             }
         } catch (err) {

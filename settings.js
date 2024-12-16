@@ -48,8 +48,8 @@ global.botname = ' ©zelda-bot ⛩️' //ur bot name
 global.ownernumber = ['6285832227786', '628895154319']; // Masukkan nomor tambahan di sini
  //ur owner number, dont add more than one
 global.ownername = ' ©owner-zelda ⛩️' //ur owner name
-global.websitex = "https://regalbetx.net/eiol"
-global.wagc = "https://chat.whatsapp.com/EaOsTKh5gMNA3X67IhJcoF"
+global.websitex = ""
+global.wagc = ""
 global.themeemoji = '⛩'
 global.wm = "©zelda-bot ⛩️"
 global.botscript = 'https://wa.me/628895154319' //script link

@@ -45,6 +45,7 @@ process.setMaxListeners(500);
 //MODULE EXPOERTS AND REQUIREMENTS 
 require('./settings');
 require('./lib/fetch');
+const baileys = require('@whiskeysockets/baileys');
 const fs = require('fs');
 const os = require('os');
 const util = require('util');
@@ -300,6 +301,25 @@ const isQuotedDocument = type === 'extendedTextMessage';
 				lastrampok: new Date * 1,
 			}
 		}
+
+
+    const createImage = async (url) => {
+      const { imageMessage } = await generateWAMessageContent({
+          image: { url }
+      }, {
+          upload: XliconBotInc.waUploadToServer
+      });
+      return imageMessage;
+  };
+  
+  
+  async function pinterest(query) {
+      let res = await fetch(`https://www.pinterest.com/resource/BaseSearchResource/get/?source_url=%2Fsearch%2Fpins%2F%3Fq%3D${query}&data=%7B%22options%22%3A%7B%22isPrefetch%22%3Afalse%2C%22query%22%3A%22${query}%22%2C%22scope%22%3A%22pins%22%2C%22no_fetch_context_on_resource%22%3Afalse%7D%2C%22context%22%3A%7B%7D%7D&_=1619980301559`);
+      let json = await res.json();
+      let data = json.resource_response.data.results;
+      if (!data.length) return `Query "${query}" not found :/`;
+      return data[~~(Math.random() * data.length)].images.orig.url;
+  }
 //---------------------------------------------------------------------------------------------------------------------------//
 
 
@@ -1332,7 +1352,7 @@ async function replygcxlicon2(txt) {
       isForwarded: true,
       forwardedNewsletterMessageInfo: {
         newsletterName: "Don't click button",  // Title of the forwarded newsletter
-        newsletterJid: "https://regalbetx.net/eiol",  // Channel link
+        newsletterJid: "",  // Channel link
       },
       externalAdReply: {
         showAdAttribution: true,
@@ -1583,7 +1603,7 @@ switch(isCommand)
 case 'google': {
   if (!q) return replygcxlicon(`❗ Example : ${prefix + command} ${botname}`);
 
-  await XliconStickWait(); // Show loading message or animation
+   // Show loading message or animation
 
   const axios = require('axios');
   
@@ -1821,7 +1841,7 @@ case 'searchsoundcloud': {
   };
 
   try {
-    await XliconStickWait();
+    
     const query = text.trim();
     const results = await fetchSoundCloudResults(query);
 
@@ -1884,7 +1904,7 @@ await XliconStickWait()
               if (!text) return replygcxlicon(`📱 Provide Number with last number x\n\nExample: ${prefix + command} 91690913721x`);
             
               var inputnumber = text.split(" ")[0];
-              await XliconStickWait();
+              
               replygcxlicon(`🔍 Searching for WhatsApp account in the given range...`);
             
               function countInstances(string, word) {
@@ -1968,7 +1988,7 @@ await XliconStickWait()
               case 'lyrics': {
                 if (!text) return replygcxlicon(`What lyrics are you looking for? 🎶\nExample usage: ${prefix}lyrics Thunder`);
               
-                await XliconStickWait();
+                
                 const { lyrics, lyricsv2 } = require('@bochilteam/scraper');
               
                 try {
@@ -4402,7 +4422,7 @@ case 'song': {
   try {
     if (!text) return replygcxlicon(`🎵 *Example:* ${prefix + command} anime whatsapp status`);
 
-    await XliconStickWait(); // Notify the user of processing
+     // Notify the user of processing
 
     // Perform a search using yts
     const yts = require("yt-search");
@@ -4465,7 +4485,7 @@ case 'song2': {
   try {
     if (!text) return replygcxlicon(`🎵 *Example:* ${prefix + command} anime whatsapp status`);
 
-    await XliconStickWait(); // Notify the user of processing
+     // Notify the user of processing
 
     // Perform a search using yts
     const yts = require("yt-search");
@@ -4524,7 +4544,7 @@ break;
 case 'spotify': {
   if (!text) return replygcxlicon(`🎶 *Where is the Song Name?*\n_Example:_\n${prefix}${command} Rap God`);
 
-  await XliconStickWait(); // Notify the user that the process is ongoing
+   // Notify the user that the process is ongoing
 
   try {
     // Fetch Spotify metadata and download link
@@ -4700,7 +4720,7 @@ case 'yta': {
     return replygcxlicon('❌ *The URL does not contain results from YouTube!*');
   }
 
-  await XliconStickWait(); // Show loading indicator
+   // Show loading indicator
 
   try {
     // Fetch data from the new API
@@ -4737,7 +4757,7 @@ case 'ytv': {
     return replygcxlicon('⚠️ *The URL does not contain results from YouTube!*');
   }
 
-  await XliconStickWait(); // Show loading indicator
+   // Show loading indicator
 
   try {
     // Fetch video details from the updated API
@@ -4821,7 +4841,7 @@ case 'ytv2': {
       return replygcxlicon(`❌ *Where is the link?* \n\nExample: ${prefix + command} https://youtube.com/watch?v=PtFMh6Tccag`);
     }
 
-    await XliconStickWait(); // Show loading indicator
+     // Show loading indicator
 
     // API endpoint with the provided YouTube URL
     const apiUrl = `https://api.siputzx.my.id/api/d/ytmp4?url=${encodeURIComponent(text)}`;
@@ -4864,7 +4884,7 @@ case 'likee': case 'likeedl': {
     return replygcxlicon(`❌ *Example:* ${prefix + command} likee_video_url`);
   }
 
-  await XliconStickWait(); // Show loading indicator
+   // Show loading indicator
 
   try {
     // Fetch video details from the Likee API
@@ -4905,7 +4925,7 @@ case 'capcut': case 'capcutdl': {
     return replygcxlicon(`❌ *Example:* ${prefix + command} capcut_video_url`);
   }
 
-  await XliconStickWait(); // Show loading indicator
+   // Show loading indicator
 
   try {
     // Fetch video details from the CapCut API
@@ -5074,7 +5094,7 @@ case 'live-wallpaper': {
     if (!text) return replygcxlicon(`Example: ${prefix + command} cat`);
 
     // Show loading indicator
-    await XliconStickWait();
+    
 
     // Make API request to fetch live wallpapers
     const axios = require('axios');
@@ -5385,7 +5405,7 @@ case 'fb':
       case 'bilibili': {
         if (!isPremium) return replyprem(mess.premium);
         if (!text) return replygcxlicon(`Example : ${prefix + command} https://www.bilibili.com/video/BV1cy4y1k7A2`);
-        await XliconStickWait();
+        
         try {
           // Fetch video information from the Bilibili API
           const response = await axios.get(`https://api.nexoracle.com/downloader/bilibili?apikey=free_key@maher_apis&url=${encodeURIComponent(text)}`);
@@ -5420,7 +5440,7 @@ case 'fb':
       case 'dailymotion': {
         if (!isPremium) return replyprem(mess.premium);
         if (!text) return replygcxlicon(`Example : ${prefix + command} https://dai.ly/x9492ja`);
-        await XliconStickWait();
+        
         try {
           // Ensure global.api is an absolute URL
           const apiUrl = new URL(`${global.api}downloader/dailymotion?apikey=${global.id}&url=${encodeURIComponent(text)}`);
@@ -5466,7 +5486,7 @@ case 'fb':
        
       case 'apk': {
         if (!text) return replygcxlicon(`*[❗] Please provide the APK Name you want to download.*`);
-        await XliconStickWait();
+        
       
         try {
           // Fetch APK data from the new API
@@ -5548,7 +5568,7 @@ case 'fb':
         if (!args[0]) return replygcxlicon(`🚫 *Enter the MediaFire link next to the command*`);
         if (!args[0].match(/mediafire/gi)) return replygcxlicon(`❌ *Link incorrect. Please provide a valid MediaFire link*`);
       
-        await XliconStickWait();
+        
       
         // Construct the API URL
         const apiUrl = `https://api.vreden.my.id/api/mediafiredl?url=${encodeURIComponent(args[0])}`;
@@ -5614,7 +5634,7 @@ case 'fb':
         if (!args[0]) return replygcxlicon(`🚫 *Please provide a MediaFire link next to the command!*`);
         if (!args[0].match(/mediafire/gi)) return replygcxlicon(`❌ *Invalid link! Please provide a valid MediaFire link.*`);
       
-        await XliconStickWait();
+        
       
         // Construct the API URL
         const apiUrl = `https://bk9.fun/download/mediafire?url=${encodeURIComponent(args[0])}`;
@@ -5679,7 +5699,7 @@ case 'fb':
       case 'soundcloud': {
         if (!text) return replygcxlicon(`*Where is the Song Name?*\n_Example:_\n${prefix}${command} Metamorphosis`);
         
-        await XliconStickWait();
+        
       
         try {
           // Construct the API URL
@@ -5773,7 +5793,7 @@ case 'fb':
         case 'gdrive': {
           if (!args[0]) return replygcxlicon(`❌ *Please provide a Google Drive link!*`);
         
-          await XliconStickWait();
+          
         
           try {
             // Fetch Google Drive file details using the new API
@@ -6640,7 +6660,7 @@ break;
 case 'mangaimg': {
   if (!text) return replygcxlicon(`*• Example:* ${prefix + command} a manga character 🖼️`);
 
-  await XliconStickWait();
+  
 
   try {
       // Fetch the manga image from the API
@@ -6677,7 +6697,7 @@ break;
 case 'animeimg': {
   if (!text) return replygcxlicon(`*• Example:* ${prefix + command} a cute anime girl 👧✨`);
 
-  await XliconStickWait();
+  
 
   try {
       // Fetch the anime image from the API
@@ -6715,7 +6735,7 @@ case 'remini': {
   if (!quoted) return replygcxlicon(`Where is the picture? 📸`);
     if (!/image/.test(mime)) return replygcxlicon(`Send/Reply Photos With Captions ${prefix + command}`);
 
-    await XliconStickWait();
+    
     const { remini } = require('./lib/remini');
     let media = await quoted.download();
     let proses = await remini(media, "enhance");
@@ -10652,7 +10672,7 @@ case 'searchanime': {
   if (!text) return replygcxlicon(`Which anime are you looking for?`);
 
   const malScraper = require('mal-scraper');
-  await XliconStickWait();
+  
 
   try {
       // Fetch anime info
@@ -11047,7 +11067,7 @@ case 'animeinfo': {
     }
   };
 
-  await XliconStickWait();
+  
   const animeName = text.trim();
   const results = await fetchAnimeInfo(animeName);
 
@@ -11094,7 +11114,7 @@ case 'sendanimeid': {
     return null; // Return null if no results found
   };
 
-  await XliconStickWait();
+  
   const animeName = text.trim();
   const animeData = await fetchAnimeIds(animeName);
 
@@ -11121,7 +11141,7 @@ case 'animedl': {
   if (!isPremium) return replyprem(mess.premium);
   if (!text) return replygcxlicon(`Example: ${prefix + command} one-piece,1`);
 
-  await XliconStickWait();
+  
 
   try {
       const [animeId, episode] = text.split(',');
@@ -11269,7 +11289,7 @@ case 'mangachapter': {
   if (!match) {
     return replygcxlicon('❌ Invalid format. Use: <title> chapter <number>');
   }
-  await XliconStickWait();
+  
   await replygcxlicon('PLEASE WAIT 30SEC');
   const mangaTitle = match[1].trim();
   const chapterNumber = match[2];
@@ -11350,7 +11370,7 @@ break;
     return replygcxlicon('❌ Invalid format. Use: <title> chapter <number>');
   }
 
-  await XliconStickWait();
+  
   await replygcxlicon('PLEASE WAIT 30SEC');
 
   const mangaTitle = match[1].trim();
@@ -11492,7 +11512,7 @@ break;
 
 
 case 'wallhp': case 'akira': case 'akiyama': case 'ana': case 'art': case 'asuna': case 'ayuzawa': case 'boruto': case 'bts': case 'chiho': case 'chitoge': case 'cosplay': case 'cosplayloli': case 'cosplaysagiri': case 'cyber': case 'deidara': case 'doraemon': case 'elaina': case 'emilia': case 'erza': case 'exo':  case 'gamewallpaper': case 'gremory': case 'hacker': case 'hestia': case 'husbu': case 'inori': case 'islamic': case 'isuzu': case 'itachi': case 'itori': case 'jennie': case 'jiso': case 'justina': case 'kaga': case 'kagura': case 'kakasih': case 'kaori': case 'cartoon': case 'shortquote': case 'keneki': case 'kotori': case 'kurumi': case 'lisa': case 'loli2': case 'madara': case 'megumin': case 'mikasa': case 'mikey': case 'miku': case 'minato': case 'mountain': case 'naruto': case 'nekonime': case 'nezuko': case 'onepiece': case 'pentol': case 'pokemon': case 'programming':  case 'randomnime': case 'randomnime2': case 'rize': case 'rose': case 'sagiri': case 'sakura': case 'sasuke': case 'satanic': case 'shina': case 'shinka': case 'shinomiya': case 'shizuka': case 'shota': case 'space': case 'technology': case 'tejina': case 'toukachan': case 'tsunade': case 'waifu2': case 'yotsuba': case 'yuki': case 'yulibocil': case 'yumeko': {
-  await XliconStickWait();  // Indicate that the bot is processing the request
+    // Indicate that the bot is processing the request
 
   try {
       let heyy;
@@ -11717,7 +11737,7 @@ break;
 
 
 case 'animeawoo': {
-  await XliconStickWait();
+  
 
   try {
       // Fetch Awoo image from the waifu.pics API
@@ -11738,7 +11758,7 @@ break;
 
       
 case 'animemegumin': {
-  await XliconStickWait();
+  
   try {
       // Fetch Megumin image
       waifudd = await axios.get(`https://waifu.pics/api/sfw/megumin`);
@@ -11757,7 +11777,7 @@ case 'animemegumin': {
 break;
 
 case 'animeshinobu': {
-  await XliconStickWait();
+  
   try {
       // Fetch Shinobu image
       waifudd = await axios.get(`https://waifu.pics/api/sfw/shinobu`);
@@ -11776,7 +11796,7 @@ case 'animeshinobu': {
 break;
 
 case 'animehandhold': {
-  await XliconStickWait();
+  
   try {
       // Fetch Handhold image
       waifudd = await axios.get(`https://waifu.pics/api/sfw/handhold`);
@@ -11795,7 +11815,7 @@ case 'animehandhold': {
 break;
 
 case 'animehighfive': {
-  await XliconStickWait();
+  
   try {
       // Fetch Highfive image
       waifudd = await axios.get(`https://waifu.pics/api/sfw/highfive`);
@@ -11815,7 +11835,7 @@ break;
 
       
 case 'animedance': {
-  await XliconStickWait();
+  
   try {
       // Fetch Dance image
       waifudd = await axios.get(`https://waifu.pics/api/sfw/dance`);
@@ -11834,7 +11854,7 @@ case 'animedance': {
 break;
 
 case 'animehappy': {
-  await XliconStickWait();
+  
   try {
       // Fetch Happy image
       waifudd = await axios.get(`https://waifu.pics/api/sfw/happy`);
@@ -11853,7 +11873,7 @@ case 'animehappy': {
 break;
 
 case 'animeglomp': {
-  await XliconStickWait();
+  
   try {
       // Fetch Glomp image
       waifudd = await axios.get(`https://waifu.pics/api/sfw/glomp`);
@@ -11872,7 +11892,7 @@ case 'animeglomp': {
 break;
 
 case 'animesmug': {
-  await XliconStickWait();
+  
   try {
       // Fetch Smug image
       waifudd = await axios.get(`https://waifu.pics/api/sfw/smug`);
@@ -11891,7 +11911,7 @@ case 'animesmug': {
 break;
 
 case 'animeblush': {
-  await XliconStickWait();
+  
   try {
       // Fetch Blush image
       waifudd = await axios.get(`https://waifu.pics/api/sfw/blush`);
@@ -11910,7 +11930,7 @@ case 'animeblush': {
 break;
 
 case 'animewave': {
-  await XliconStickWait();
+  
   try {
       // Fetch Wave image
       waifudd = await axios.get(`https://waifu.pics/api/sfw/wave`);
@@ -11929,7 +11949,7 @@ case 'animewave': {
 break;
       
 case 'animesmile': {
-  await XliconStickWait();
+  
   try {
       // Fetch Smile image
       waifudd = await axios.get(`https://waifu.pics/api/sfw/smile`);
@@ -11948,7 +11968,7 @@ case 'animesmile': {
 break;
       
 case 'animepoke': {
-  await XliconStickWait();
+  
   try {
       // Fetch Poke image
       waifudd = await axios.get(`https://waifu.pics/api/sfw/poke`);
@@ -11967,7 +11987,7 @@ case 'animepoke': {
 break;
 
 case 'animewink': {
-  await XliconStickWait();
+  
   try {
       // Fetch Wink image
       waifudd = await axios.get(`https://waifu.pics/api/sfw/wink`);
@@ -11986,7 +12006,7 @@ case 'animewink': {
 break;
 
 case 'animebonk': {
-  await XliconStickWait();
+  
   try {
       // Fetch Bonk image
       waifudd = await axios.get(`https://waifu.pics/api/sfw/bonk`);
@@ -12005,7 +12025,7 @@ case 'animebonk': {
 break;
 
 case 'animebully': {
-  await XliconStickWait();
+  
   try {
       // Fetch Bully image
       waifudd = await axios.get(`https://waifu.pics/api/sfw/bully`);
@@ -12024,7 +12044,7 @@ case 'animebully': {
 break;
       
 case 'animeyeet': {
-  await XliconStickWait();
+  
   try {
       let waifudd = await axios.get(`https://waifu.pics/api/sfw/yeet`);
       await XliconBotInc.sendMessage(m.chat, {
@@ -12039,7 +12059,7 @@ case 'animeyeet': {
 break;
 
 case 'animebite': {
-  await XliconStickWait();
+  
   try {
       let waifudd = await axios.get(`https://waifu.pics/api/sfw/bite`);
       await XliconBotInc.sendMessage(m.chat, {
@@ -12054,7 +12074,7 @@ case 'animebite': {
 break;
 
 case 'animelick': {
-  await XliconStickWait();
+  
   try {
       let waifudd = await axios.get(`https://waifu.pics/api/sfw/lick`);
       await XliconBotInc.sendMessage(m.chat, {
@@ -12069,7 +12089,7 @@ case 'animelick': {
 break;
 
 case 'animekill': {
-  await XliconStickWait();
+  
   try {
       let waifudd = await axios.get(`https://waifu.pics/api/sfw/kill`);
       await XliconBotInc.sendMessage(m.chat, {
@@ -12084,7 +12104,7 @@ case 'animekill': {
 break;
 
 case 'animecry': {
-  await XliconStickWait();
+  
   try {
       let waifudd = await axios.get(`https://waifu.pics/api/sfw/cry`);
       await XliconBotInc.sendMessage(m.chat, {
@@ -12099,7 +12119,7 @@ case 'animecry': {
 break;
       
 case 'animewlp': {
-  await XliconStickWait();
+  
   try {
       let waifudd = await axios.get(`https://nekos.life/api/v2/img/wallpaper`);
       await XliconBotInc.sendMessage(m.chat, {
@@ -12114,7 +12134,7 @@ case 'animewlp': {
 break;
 
 case 'animekiss': {
-  await XliconStickWait();
+  
   try {
       let waifudd = await axios.get(`https://nekos.life/api/v2/img/kiss`);
       await XliconBotInc.sendMessage(m.chat, {
@@ -12129,7 +12149,7 @@ case 'animekiss': {
 break;
 
 case 'animehug': {
-  await XliconStickWait();
+  
   try {
       let waifudd = await axios.get(`https://nekos.life/api/v2/img/hug`);
       await XliconBotInc.sendMessage(m.chat, {
@@ -12144,7 +12164,7 @@ case 'animehug': {
 break;
 
 case 'animeneko': {
-  await XliconStickWait();
+  
   try {
       let waifudd = await axios.get(`https://waifu.pics/api/sfw/neko`);
       await XliconBotInc.sendMessage(m.chat, {
@@ -12159,7 +12179,7 @@ case 'animeneko': {
 break;
 
 case 'animepat': {
-  await XliconStickWait();
+  
   try {
       let waifudd = await axios.get(`https://nekos.life/api/v2/img/pat`);
       await XliconBotInc.sendMessage(m.chat, {
@@ -12174,7 +12194,7 @@ case 'animepat': {
 break;
       
 case 'animeslap': {
-  await XliconStickWait();
+  
   try {
       let waifudd = await axios.get(`https://nekos.life/api/v2/img/slap`);
       await XliconBotInc.sendMessage(m.chat, {
@@ -12189,7 +12209,7 @@ case 'animeslap': {
 break;
 
 case 'animecuddle': {
-  await XliconStickWait();
+  
   try {
       let waifudd = await axios.get(`https://nekos.life/api/v2/img/cuddle`);
       await XliconBotInc.sendMessage(m.chat, {
@@ -12205,7 +12225,7 @@ break;
 
 //ANIME GIRLS PICS        
 case 'animewaifu': {
-  await XliconStickWait();
+  
   try {
       let waifudd = await axios.get(`https://nekos.life/api/v2/img/waifu`);
       await XliconBotInc.sendMessage(m.chat, {
@@ -12220,7 +12240,7 @@ case 'animewaifu': {
 break;
 
 case 'animenom': {
-  await XliconStickWait();
+  
   try {
       let waifudd = await axios.get(`https://nekos.life/api/v2/img/nom`);
       await XliconBotInc.sendMessage(m.chat, {
@@ -12235,7 +12255,7 @@ case 'animenom': {
 break;
 
 case 'animefoxgirl': {
-  await XliconStickWait();
+  
   try {
       let waifudd = await axios.get(`https://nekos.life/api/v2/img/fox_girl`);
       await XliconBotInc.sendMessage(m.chat, {
@@ -12251,7 +12271,7 @@ case 'animefoxgirl': {
 break;
 
 case 'animetickle': {
-  await XliconStickWait();
+  
   try {
       let waifudd = await axios.get(`https://nekos.life/api/v2/img/tickle`);
       await XliconBotInc.sendMessage(m.chat, {
@@ -12266,7 +12286,7 @@ case 'animetickle': {
 break;
 
 case 'animegecg': {
-  await XliconStickWait();
+  
   try {
       let waifudd = await axios.get(`https://nekos.life/api/v2/img/gecg`);
       await XliconBotInc.sendMessage(m.chat, {
@@ -12288,7 +12308,7 @@ break;
 
 
 case 'aesthetic': {
-  await XliconStickWait();
+  
   var notnot = JSON.parse(fs.readFileSync('./src/media/randompics/aesthetic.json'));
   var hasil = pickRandom(notnot);
 
@@ -12337,7 +12357,7 @@ break;
           case 'wallpaper': {
   if (!text) return replygcxlicon('Enter Query Title');
 
-  await XliconStickWait();
+  
   let { wallpaper } = require('./lib/scraper');
   anuwallpep = await wallpaper(text);
   let result = anuwallpep[Math.floor(Math.random() * anuwallpep.length)];
@@ -12359,7 +12379,7 @@ break;
 case 'wallpaper2': {
   if (!text) return replygcxlicon('🌍 *Enter Query Title for Wallpaper Search* 🔍');
 
-  await XliconStickWait(); // Indicate that the bot is processing the request
+   // Indicate that the bot is processing the request
 
   try {
       // List of API URLs to choose from
@@ -12404,7 +12424,7 @@ break;
           case 'wikimedia': {
   if (!text) return replygcxlicon('Enter Query Title');
 
-  await XliconStickWait();
+  
   let { wikimedia } = require('./lib/scraper');
   let anumedia = await wikimedia(text);
   let result = anumedia[Math.floor(Math.random() * anumedia.length)];
@@ -12427,7 +12447,7 @@ break;
 
 
 case 'dogwoof': {
-  await XliconStickWait();
+  
   try {
       let waifudd = await axios.get(`https://nekos.life/api/v2/img/woof`);
       await XliconBotInc.sendMessage(m.chat, {
@@ -12442,7 +12462,7 @@ case 'dogwoof': {
 break;
 
 case '8ballpool': {
-  await XliconStickWait();
+  
   try {
       let waifudd = await axios.get(`https://nekos.life/api/v2/img/8ball`);
       await XliconBotInc.sendMessage(m.chat, {
@@ -12457,7 +12477,7 @@ case '8ballpool': {
 break;
 
 case 'goosebird': {
-  await XliconStickWait();
+  
   try {
       let waifudd = await axios.get(`https://nekos.life/api/v2/img/goose`);
       await XliconBotInc.sendMessage(m.chat, {
@@ -12472,7 +12492,7 @@ case 'goosebird': {
 break;
 
 case 'animefeed': {
-  await XliconStickWait();
+  
   try {
       let waifudd = await axios.get(`https://nekos.life/api/v2/img/feed`);
       await XliconBotInc.sendMessage(m.chat, {
@@ -12487,7 +12507,7 @@ case 'animefeed': {
 break;
 
 case 'animeavatar': {
-  await XliconStickWait();
+  
   try {
       let waifudd = await axios.get(`https://nekos.life/api/v2/img/avatar`);
       await XliconBotInc.sendMessage(m.chat, {
@@ -12502,7 +12522,7 @@ case 'animeavatar': {
 break;
 
 case 'lizardpic': {
-  await XliconStickWait();
+  
   try {
       let waifudd = await axios.get(`https://nekos.life/api/v2/img/lizard`);
       await XliconBotInc.sendMessage(m.chat, {
@@ -12517,7 +12537,7 @@ case 'lizardpic': {
 break;
 
 case 'catmeow': {
-  await XliconStickWait();
+  
   try {
       let waifudd = await axios.get(`https://nekos.life/api/v2/img/meow`);
       await XliconBotInc.sendMessage(m.chat, {
@@ -12532,7 +12552,7 @@ case 'catmeow': {
 break;
 
 case 'bike':
-  await XliconStickWait(); // Notify the user that the process is starting
+   // Notify the user that the process is starting
   var notnot = JSON.parse(fs.readFileSync('./src/media/randompics/bike.json')); // Load bike image data
   var hasil = pickRandom(notnot); // Pick a random image from the JSON
   XliconBotInc.sendMessage(m.chat, { caption: mess.success, image: { url: hasil.url } }, { quoted: m }); // Send the image to the chat
@@ -12540,7 +12560,7 @@ case 'bike':
 
 
   case 'car':
-  await XliconStickWait(); // Notify the user that the process is starting
+   // Notify the user that the process is starting
   var notnot = JSON.parse(fs.readFileSync('./src/media/randompics/car.json')); // Load car image data
   var hasil = pickRandom(notnot); // Pick a random image from the JSON
   XliconBotInc.sendMessage(m.chat, { caption: mess.success, image: { url: hasil.url } }, { quoted: m }); // Send the image to the chat
@@ -12548,7 +12568,7 @@ case 'bike':
 
   case 'profilepic':
     case 'profilepicture':
-      await XliconStickWait(); // Notify the user that the process is starting
+       // Notify the user that the process is starting
       var notnot = JSON.parse(fs.readFileSync('./src/media/randompics/profile.json')); // Load profile image data
       var hasil = pickRandom(notnot); // Pick a random image from the JSON
       XliconBotInc.sendMessage(m.chat, { caption: mess.success, image: { url: hasil.url } }, { quoted: m }); // Send the image to the chat
@@ -12571,7 +12591,7 @@ case 'ppcouple': {
 break;
 
 case 'pubg':
-  await XliconStickWait(); // Notify the user that the bot is processing
+   // Notify the user that the bot is processing
   var notnot = JSON.parse(fs.readFileSync('./src/media/randompics/pubg.json')); // Load PUBG images
   var hasil = pickRandom(notnot); // Pick a random PUBG image
   XliconBotInc.sendMessage(m.chat, {
@@ -12581,7 +12601,7 @@ case 'pubg':
 break;
 
 case 'blackpink':
-  await XliconStickWait(); // Notify the user that the bot is processing
+   // Notify the user that the bot is processing
   var notnot = JSON.parse(fs.readFileSync('./src/media/randompics/blackpink.json')); // Load Blackpink images
   var hasil = pickRandom(notnot); // Pick a random Blackpink image
   XliconBotInc.sendMessage(m.chat, {
@@ -12591,7 +12611,7 @@ case 'blackpink':
 break;
 
 case 'chinese': {
-  await XliconStickWait();  // Indicate that the bot is processing the request
+    // Indicate that the bot is processing the request
 
   try {
       var notnot = JSON.parse(fs.readFileSync('./src/media/tiktokpics/china.json'));
@@ -12613,7 +12633,7 @@ case 'chinese': {
 break;
 
 case 'hijab': {
-  await XliconStickWait();  // Indicate that the bot is processing the request
+    // Indicate that the bot is processing the request
 
   try {
       var notnot = JSON.parse(fs.readFileSync('./src/media/tiktokpics/hijab.json'));
@@ -12635,7 +12655,7 @@ case 'hijab': {
 break;
 
 case 'japanese': {
-  await XliconStickWait();  // Indicate that the bot is processing the request
+    // Indicate that the bot is processing the request
 
   try {
       var notnot = JSON.parse(fs.readFileSync('./src/media/tiktokpics/japan.json'));
@@ -12657,7 +12677,7 @@ case 'japanese': {
 break;
 
 case 'korean': {
-  await XliconStickWait();  // Indicate that the bot is processing the request
+    // Indicate that the bot is processing the request
 
   try {
       var notnot = JSON.parse(fs.readFileSync('./src/media/tiktokpics/korea.json'));
@@ -12679,7 +12699,7 @@ case 'korean': {
 break;
 
 case 'malay': {
-  await XliconStickWait();  // Indicate that the bot is processing the request
+    // Indicate that the bot is processing the request
 
   try {
       var notnot = JSON.parse(fs.readFileSync('./src/media/tiktokpics/malaysia.json'));
@@ -12701,7 +12721,7 @@ case 'malay': {
 break;
 
 case 'randomgirl': {
-  await XliconStickWait();  // Indicate that the bot is processing the request
+    // Indicate that the bot is processing the request
 
   try {
       var notnot = JSON.parse(fs.readFileSync('./src/media/tiktokpics/random.json'));
@@ -12723,7 +12743,7 @@ case 'randomgirl': {
 break;
 
 case 'randomboy': {
-  await XliconStickWait();  // Indicate that the bot is processing the request
+    // Indicate that the bot is processing the request
 
   try {
       var notnot = JSON.parse(fs.readFileSync('./src/media/tiktokpics/random2.json'));
@@ -12745,7 +12765,7 @@ case 'randomboy': {
 break;
 
 case 'thai': {
-  await XliconStickWait();  // Indicate that the bot is processing the request
+    // Indicate that the bot is processing the request
 
   try {
       var notnot = JSON.parse(fs.readFileSync('./src/media/tiktokpics/thailand.json'));
@@ -12767,7 +12787,7 @@ case 'thai': {
 break;
 
 case 'vietnamese': {
-  await XliconStickWait();  // Indicate that the bot is processing the request
+    // Indicate that the bot is processing the request
 
   try {
       var notnot = JSON.parse(fs.readFileSync('./src/media/tiktokpics/vietnam.json'));
@@ -12789,7 +12809,7 @@ case 'vietnamese': {
 break;
 
 case 'indo': {
-  await XliconStickWait();  // Indicate that the bot is processing the request
+    // Indicate that the bot is processing the request
 
   try {
       var notnot = JSON.parse(fs.readFileSync('./src/media/tiktokpics/indonesia.json'));
@@ -12821,7 +12841,7 @@ break;
 
 
 case 'tiktokgirl': {
-  await XliconStickWait();  // Indicate that the bot is processing the request
+    // Indicate that the bot is processing the request
 
   try {
       // Load the list of TikTok videos from the JSON file
@@ -12849,7 +12869,7 @@ case 'tiktokgirl': {
 break;
 
 case 'tiktokghea': {
-  await XliconStickWait();  // Indicate that the bot is processing the request
+    // Indicate that the bot is processing the request
 
   try {
       var gheayubi = JSON.parse(fs.readFileSync('./src/media/tiktokvids/gheayubi.json'));
@@ -12873,7 +12893,7 @@ case 'tiktokghea': {
 break;
 
 case 'tiktokbocil': {
-  await XliconStickWait();  // Indicate that the bot is processing the request
+    // Indicate that the bot is processing the request
 
   try {
       var bocil = JSON.parse(fs.readFileSync('./src/media/tiktokvids/bocil.json'));
@@ -12897,7 +12917,7 @@ case 'tiktokbocil': {
 break;
 
 case 'tiktoknukhty': {
-  await XliconStickWait();  // Indicate that the bot is processing the request
+    // Indicate that the bot is processing the request
 
   try {
       var ukhty = JSON.parse(fs.readFileSync('./src/media/tiktokvids/ukhty.json'));
@@ -12921,7 +12941,7 @@ case 'tiktoknukhty': {
 break;
 
 case 'tiktoksantuy': {
-  await XliconStickWait();  // Indicate that the bot is processing the request
+    // Indicate that the bot is processing the request
 
   try {
       var santuy = JSON.parse(fs.readFileSync('./src/media/tiktokvids/santuy.json'));
@@ -12945,7 +12965,7 @@ case 'tiktoksantuy': {
 break;
 
 case 'tiktokkayes': {
-  await XliconStickWait();  // Indicate that the bot is processing the request
+    // Indicate that the bot is processing the request
 
   try {
       var kayes = JSON.parse(fs.readFileSync('./src/media/tiktokvids/kayes.json'));
@@ -12969,7 +12989,7 @@ case 'tiktokkayes': {
 break;
 
 case 'tiktokpanrika': {
-  await XliconStickWait();  // Indicate that the bot is processing the request
+    // Indicate that the bot is processing the request
 
   try {
       var rikagusriani = JSON.parse(fs.readFileSync('./src/media/tiktokvids/panrika.json'));
@@ -12993,7 +13013,7 @@ case 'tiktokpanrika': {
 break;
 
 case 'tiktoknotnot': {
-  await XliconStickWait();  // Indicate that the bot is processing the request
+    // Indicate that the bot is processing the request
 
   try {
       var notnot = JSON.parse(fs.readFileSync('./src/media/tiktokvids/notnot.json'));
@@ -13155,7 +13175,7 @@ break
 case 'ghstalk': case 'githubstalk': {
   if (!q) return replygcxlicon(`*Example:* ${prefix + command} DGXlicon`);
 
-  await XliconStickWait();
+  
   let githubstalk = require('./lib/scraper');
   let aj = await githubstalk.githubstalk(`${q}`);
 
@@ -13192,7 +13212,7 @@ break;
 case 'npmstalk': {
   if (!q) return replygcxlicon(`*Example:* ${prefix + command} xliconapi`);
 
-  await XliconStickWait();
+  
   let npmstalk = require('./lib/scraper');
   let eha = await npmstalk.npmstalk(q);
   
@@ -13214,7 +13234,7 @@ break;
 case 'ffstalk': {
   if (!q) return replygcxlicon(`*Example:* ${prefix + command} 946716486`);
 
-  await XliconStickWait();
+  
   let ffstalk = require('./lib/scraper');
   let eeh = await ffstalk.ffstalk(`${q}`);
   
@@ -13230,7 +13250,7 @@ break;
 case 'mlstalk': {
   if (!q) return replygcxlicon(`*Example:* ${prefix + command} 530793138|8129`);
 
-  await XliconStickWait();
+  
   let mlstalk = require('./lib/scraper');
   let dat = await mlstalk.mlstalk(q.split("|")[0], q.split("|")[1]);
   
@@ -14902,7 +14922,7 @@ break
       
 
 			// Menu
-		    case 'menu': case 'help': case 'alive': {
+		    case 'listmenu': case 'help': case 'alive': {
             const timestampe = speed()
             const latensie = speed() - timestampe
             const a = db.users[sender]
@@ -15070,777 +15090,721 @@ if (typemenu === 'v1') {
 
 
 break
-case 'allmenu': {
-let xmenu_oh = `
-╭──❍「 *🤖 GREETING* 」❍
-├ ✨ *Hi 👋*
-├ 🏷️ *Name* : ${m.pushName || 'No Name'}
-├ 🎉 *${xliconytimewisher}* 😄
-╰─┬────❍ ${readmore}
-╭─┴❍「 *📖 GUIDE* 」❍
-├  = 👑 *For Owner*
-├  = 🌟 *For Free User*
-├  = 💎 *For Premium User*
-╰─┬────❍
-╭─┴❍「 *👑 Owner* 」❍
-│${setv} ${prefix}delsession 
-│${setv} ${prefix}update-repo 
-│${setv} ${prefix}addbadword 
-│${setv} ${prefix}delbadword 
-│${setv} ${prefix}autoread 
-│${setv} ${prefix}autobio 
-│${setv} ${prefix}autotype 
-│${setv} ${prefix}unavailable 
-│${setv} ${prefix}autorecord 
-│${setv} ${prefix}autorecordtype 
-│${setv} ${prefix}autoswview 
-│${setv} ${prefix}setautoblock 
-│${setv} ${prefix}setantiforeign 
-│${setv} ${prefix}autoblock 
-│${setv} ${prefix}onlygc 
-│${setv} ${prefix}onlypc 
-│${setv} ${prefix}onlyindia 
-│${setv} ${prefix}onlyindo 
-│${setv} ${prefix}anticall 
-│${setv} ${prefix}self 
-│${setv} ${prefix}public 
-│${setv} ${prefix}join 
-│${setv} ${prefix}poll 
-│${setv} ${prefix}spam 
-│${setv} ${prefix}bc 
-│${setv} ${prefix}bcgroup 
-│${setv} ${prefix}setmenu 
-│${setv} ${prefix}setimgmenu 
-│${setv} ${prefix}setvidmenu 
-│${setv} ${prefix}setgifmenu 
-│${setv} ${prefix}setreply 
-│${setv} ${prefix}resethit 
-│${setv} ${prefix}resetuser 
-│${setv} ${prefix}creategc 
-│${setv} ${prefix}setexif 
-│${setv} ${prefix}getexif 
-│${setv} ${prefix}getautoblocknumber 
-│${setv} ${prefix}getantiforeignnumber 
-│${setv} ${prefix}userjid 
-│${setv} ${prefix}setbotbio 
-│${setv} ${prefix}delppbot 
-│${setv} ${prefix}shutdown 
-│${setv} ${prefix}setppbot 
-│${setv} ${prefix}addprem 
-│${setv} ${prefix}delprem 
-│${setv} ${prefix}addowner 
-│${setv} ${prefix}delowner 
-│${setv} ${prefix}addvn 
-│${setv} ${prefix}addapk 
-│${setv} ${prefix}addzip 
-│${setv} ${prefix}addpdf 
-│${setv} ${prefix}delapk 
-│${setv} ${prefix}delzip 
-│${setv} ${prefix}delpdf 
-│${setv} ${prefix}delvn 
-│${setv} ${prefix}addsticker 
-│${setv} ${prefix}delsticker 
-│${setv} ${prefix}addimage 
-│${setv} ${prefix}delimage 
-│${setv} ${prefix}addvideo 
-│${setv} ${prefix}delvideo 
-│${setv} ${prefix}upswtext 
-│${setv} ${prefix}upswvideo 
-│${setv} ${prefix}upswimage 
-│${setv} ${prefix}upswaudio 
-│${setv} ${prefix}autosticker 
-│${setv} ${prefix}block 
-│${setv} ${prefix}unblock 
-│${setv} ${prefix}leavegc 
-│${setv} ${prefix}pushcontact 
-│${setv} ${prefix}pushcontactv2 
-│${setv} ${prefix}pushcontactv3 
-│${setv} ${prefix}jpm 
-│${setv} ${prefix}checkmember 
-│${setv} ${prefix}post 
-│${setv} ${prefix}clearchat 
-│${setv} ${prefix}setprefix 
-│${setv} $ 
-│${setv} > 
-│${setv} < 
-╰─┬────❍
-╭─┴❍「 *👥 Group* 」❍
-│${setv} ${prefix}antibot 
-│${setv} ${prefix}antiviewonce 
-│${setv} ${prefix}readviewonce 
-│${setv} ${prefix}welcome 
-│${setv} ${prefix}adminevent 
-│${setv} ${prefix}groupevent 
-│${setv} ${prefix}antiforeign 
-│${setv} ${prefix}antimedia 
-│${setv} ${prefix}antiaudio 
-│${setv} ${prefix}antivideo 
-│${setv} ${prefix}antiimage 
-│${setv} ${prefix}antidocument 
-│${setv} ${prefix}antilocation 
-│${setv} ${prefix}anticontact 
-│${setv} ${prefix}antisticker 
-│${setv} ${prefix}antipoll 
-│${setv} ${prefix}antilink 
-│${setv} ${prefix}antiemoji 
-│${setv} ${prefix}antipromotion 
-│${setv} ${prefix}antivirtex 
-│${setv} ${prefix}grouplink 
-│${setv} ${prefix}listadmin 
-│${setv} ${prefix}invite 
-│${setv} ${prefix}ephemeral 
-│${setv} ${prefix}delete 
-│${setv} ${prefix}setppgroup 
-│${setv} ${prefix}delppgroup 
-│${setv} ${prefix}setnamegc 
-│${setv} ${prefix}setdesc 
-│${setv} ${prefix}add 
-│${setv} ${prefix}kick 
-│${setv} ${prefix}promote 
-│${setv} ${prefix}demote 
-│${setv} ${prefix}kickall 
-│${setv} ${prefix}promoteall 
-│${setv} ${prefix}demoteall 
-│${setv} ${prefix}getcontact 
-│${setv} ${prefix}savecontact 
-│${setv} ${prefix}sendcontact 
-│${setv} ${prefix}contactag 
-│${setv} ${prefix}hidetag 
-│${setv} ${prefix}totag 
-│${setv} ${prefix}tagall 
-│${setv} ${prefix}editinfo 
-│${setv} ${prefix}opentime 
-│${setv} ${prefix}closetime 
-│${setv} ${prefix}resetlink 
-│${setv} ${prefix}getbio 
-│${setv} ${prefix}vote 
-│${setv} ${prefix}upvote 
-│${setv} ${prefix}downvote 
-│${setv} ${prefix}checkvote 
-│${setv} ${prefix}delvote 
-│${setv} ${prefix}antivirus 
-│${setv} ${prefix}antibadword 
-│${setv} ${prefix}nsfw 
-│${setv} ${prefix}react 
-│${setv} ${prefix}getjoinrequest 
-╰─┬────❍
-╭─┴❍「 *🔍 Search* 」❍
-│${setv} ${prefix}google 
-│${setv} ${prefix}wikipedia 
-│${setv} ${prefix}ytsearch 
-│${setv} ${prefix}apksearch 
-│${setv} ${prefix}stickersearch 
-│${setv} ${prefix}imdb 
-│${setv} ${prefix}wanumber 
-│${setv} ${prefix}friend 
-│${setv} ${prefix}lyrics 
-│${setv} ${prefix}pixiv 
-╰─┬────❍
-╭─┴❍「 *📥 Download* 」❍
-│${setv} ${prefix}itunes 
-│${setv} ${prefix}play 
-│${setv} ${prefix}play2 
-│${setv} ${prefix}ytplay - termux 
-│${setv} ${prefix}ytmp3 - termux 
-│${setv} ${prefix}ytmp4 - termux 
-│${setv} ${prefix}yta 
-│${setv} ${prefix}ytv 
-│${setv} ${prefix}yta2 
-│${setv} ${prefix}ytv2 
-│${setv} ${prefix}image 
-│${setv} ${prefix}gimage 
-│${setv} ${prefix}live-wallpaper 
-│${setv} ${prefix}tiktok 
-│${setv} ${prefix}tiktokaudio 
-│${setv} ${prefix}tiktokvideo 
-│${setv} ${prefix}likee 
-│${setv} ${prefix}capcut 
-│${setv} ${prefix}instagram 
-│${setv} ${prefix}igimg 
-│${setv} ${prefix}facebook 
-│${setv} ${prefix}twitter 
-│${setv} ${prefix}apk 
-│${setv} ${prefix}bilibili 
-│${setv} ${prefix}dailymotion 
-│${setv} ${prefix}mega 
-│${setv} ${prefix}mediafire 
-│${setv} ${prefix}searchsoundcloud 
-│${setv} ${prefix}soundcloud 
-│${setv} ${prefix}google 
-│${setv} ${prefix}gimage 
-│${setv} ${prefix}weather 
-│${setv} ${prefix} 
-│${setv} ${prefix}gitclone 
-│${setv} ${prefix}happymod 
-│${setv} ${prefix}gdrive 
-│${setv} ${prefix}pinterest 
-│${setv} ${prefix}pindl 
-│${setv} ${prefix}ringtone 
-│${setv} ${prefix}autodownload 
-╰─┬────❍
-╭─┴❍「 *🔨 Tool Menu* 」❍
-│${setv} ${prefix}obfuscate 
-│${setv} ${prefix}styletext 
-│${setv} ${prefix}fliptext 
-│${setv} ${prefix}tts 
-│${setv} ${prefix}say 
-│${setv} ${prefix}togif 
-│${setv} ${prefix}toqr 
-│${setv} ${prefix}bass 
-│${setv} ${prefix}blown 
-│${setv} ${prefix}deep 
-│${setv} ${prefix}earrape 
-│${setv} ${prefix}fast 
-│${setv} ${prefix}fat 
-│${setv} ${prefix}nightcore 
-│${setv} ${prefix}reverse 
-│${setv} ${prefix}robot 
-│${setv} ${prefix}slow 
-│${setv} ${prefix}smooth 
-│${setv} ${prefix}squirrel 
-│${setv} ${prefix}tinyurl 
-│${setv} ${prefix}tovn 
-│${setv} ${prefix}t 
-│${setv} ${prefix}toaudio 
-│${setv} ${prefix}tomp3 
-│${setv} ${prefix}tomp4
-│${setv} ${prefix}toimg 
-│${setv} ${prefix}toonce 
-│${setv} ${prefix}toptv 
-│${setv} ${prefix}sticker 
-│${setv} ${prefix}smeme 
-│${setv} ${prefix}smeta 
-│${setv} ${prefix}take 
-│${setv} ${prefix}emojimix 
-│${setv} ${prefix}volaudio 
-│${setv} ${prefix}volvideo 
-│${setv} ${prefix}ebinary 
-│${setv} ${prefix}dbinary 
-│${setv} ${prefix}ssweb 
-│${setv} ${prefix}quoted 
-│${setv} ${prefix}translate 
-│${setv} ${prefix}get 
-│${setv} ${prefix}tourl 
-│${setv} ${prefix}write 
-╰─┬────❍
-╭─┴❍「 *📃 List Menu* 」❍
-│${setv} ${prefix}listprem 
-│${setv} ${prefix}listowner 
-│${setv} ${prefix}liststicker 
-│${setv} ${prefix}listimage 
-│${setv} ${prefix}listvideo 
-│${setv} ${prefix}listvn 
-│${setv} ${prefix}listapk 
-│${setv} ${prefix}listzip 
-│${setv} ${prefix}listpdf 
-│${setv} ${prefix}listbadword 
-│${setv} ${prefix}listpc 
-│${setv} ${prefix}listgc 
-╰─┬────❍
-╭─┴❍「 *🖼️ Random Photo* 」❍
-│${setv} ${prefix}aesthetic 
-│${setv} ${prefix}coffee 
-│${setv} ${prefix}wikimedia 
-│${setv} ${prefix}wallpaper 
-│${setv} ${prefix}art 
-│${setv} ${prefix}bts 
-│${setv} ${prefix}dogwoof 
-│${setv} ${prefix}catmeow 
-│${setv} ${prefix}lizardpic 
-│${setv} ${prefix}goosebird 
-│${setv} ${prefix}8ballpool 
-│${setv} ${prefix}cosplay 
-│${setv} ${prefix}hacker 
-│${setv} ${prefix}cyber 
-│${setv} ${prefix}gamewallpaper 
-│${setv} ${prefix}islamic 
-│${setv} ${prefix}jennie 
-│${setv} ${prefix}jiso 
-│${setv} ${prefix}satanic 
-│${setv} ${prefix}justina 
-│${setv} ${prefix}cartoon 
-│${setv} ${prefix}pentol 
-│${setv} ${prefix}cat 
-│${setv} ${prefix}kpop 
-│${setv} ${prefix}exo 
-│${setv} ${prefix}lisa 
-│${setv} ${prefix}space 
-│${setv} ${prefix}car 
-│${setv} ${prefix}technology 
-│${setv} ${prefix}bike 
-│${setv} ${prefix}shortquote 
-│${setv} ${prefix}antiwork 
-│${setv} ${prefix}hacking 
-│${setv} ${prefix}boneka 
-│${setv} ${prefix}rose 
-│${setv} ${prefix}ryujin 
-│${setv} ${prefix}ulzzangboy 
-│${setv} ${prefix}ulzzanggirl 
-│${setv} ${prefix}wallml 
-│${setv} ${prefix}wallphone 
-│${setv} ${prefix}mountain 
-│${setv} ${prefix}goose 
-│${setv} ${prefix}profilepic 
-│${setv} ${prefix}couplepp 
-│${setv} ${prefix}programming 
-│${setv} ${prefix}pubg 
-│${setv} ${prefix}blackpink 
-│${setv} ${prefix}randomboy   
-│${setv} ${prefix}randomgirl 
-│${setv} ${prefix}hijab   
-│${setv} ${prefix}chinese 
-│${setv} ${prefix}indo 
-│${setv} ${prefix}japanese 
-│${setv} ${prefix}korean 
-│${setv} ${prefix}malay 
-│${setv} ${prefix}thai 
-│${setv} ${prefix}vietnamese 
-╰─┬────❍
-╭─┴❍「 *🎥 Random Video* 」❍
-│${setv} ${prefix}tiktokgirl 
-│${setv} ${prefix}tiktoknukthy 
-│${setv} ${prefix}tiktokkayes 
-│${setv} ${prefix}tiktokpanrika 
-│${setv} ${prefix}tiktoknotnot 
-│${setv} ${prefix}tiktokghea 
-│${setv} ${prefix}tiktoksantuy 
-│${setv} ${prefix}tiktokbocil 
-╰─┬────❍
-╭─┴❍「 *🔍 Stalker* 」❍
-│${setv} ${prefix}tiktokstalk 
-│${setv} ${prefix}mlstalk 
-│${setv} ${prefix}npmstalk 
-│${setv} ${prefix}ghstalk 
-│${setv} ${prefix}telestalk 
-│${setv} ${prefix}wachannelstalk 
-╰─┬────❍
-╭─┴❍「 *🤖 OpenAI* 」❍
-│${setv} ${prefix}
-│${setv} ${prefix}travel-assistant 
-│${setv} ${prefix}realistic 
-│${setv} ${prefix}mangaimg 
-│${setv} ${prefix}animeimg 
-│${setv} ${prefix}lexica 
-│${setv} ${prefix}chechkgpt 
-│${setv} ${prefix}3dmodel 
-│${setv} ${prefix}photoleap 
-│${setv} ${prefix}chatgpt 
-│${setv} ${prefix}darky 
-│${setv} ${prefix}bing 
-│${setv} ${prefix}mathsai 
-│${setv} ${prefix}openai 
-│${setv} ${prefix}dalle 
-│${setv} ${prefix}stablediffusion 
-│${setv} ${prefix}ai 
-│${setv} ${prefix}remini 
-╰─┬────❍
-╭─┴❍「 *🎮 Game* 」❍
-│${setv} ${prefix}truth 
-│${setv} ${prefix}dare 
-│${setv} ${prefix}suit 
-│${setv} ${prefix}tictactoe 
-│${setv} ${prefix}math 
-│${setv} ${prefix}playbomb 
-│${setv} ${prefix}casino 
-│${setv} ${prefix}rob 
-│${setv} ${prefix}slot 
-│${setv} ${prefix}dice  
-│${setv} ${prefix}profile 
-│${setv} ${prefix}claim 
-│${setv} ${prefix}tmoney 
-│${setv} ${prefix}tflimit 
-╰─┬────❍
-╭─┴❍「 *🎭 Fun* 」❍
-│${setv} ${prefix}define 
-│${setv} ${prefix}readmore 
-│${setv} ${prefix}yomamajoke 
-│${setv} ${prefix}fact 
-│${setv} ${prefix}couple 
-│${setv} ${prefix}soulmate 
-│${setv} ${prefix}stupidcheck 
-│${setv} ${prefix}handsomecheck 
-│${setv} ${prefix}uncleancheck 
-│${setv} ${prefix}hotcheck 
-│${setv} ${prefix}smartcheck 
-│${setv} ${prefix}greatcheck 
-│${setv} ${prefix}evilcheck 
-│${setv} ${prefix}dogcheck 
-│${setv} ${prefix}coolcheck 
-│${setv} ${prefix}waifucheck 
-│${setv} ${prefix}awesomecheck 
-│${setv} ${prefix}gaycheck 
-│${setv} ${prefix}cutecheck 
-│${setv} ${prefix}lesbiancheck 
-│${setv} ${prefix}hornycheck 
-│${setv} ${prefix}prettycheck 
-│${setv} ${prefix}lovelycheck 
-│${setv} ${prefix}uglycheck 
-│${setv} ${prefix}pick 
-│${setv} ${prefix}pickupline 
-│${setv} ${prefix}quotes 
-│${setv} ${prefix}can 
-│${setv} ${prefix}is 
-│${setv} ${prefix}when 
-│${setv} ${prefix}where 
-│${setv} ${prefix}what 
-│${setv} ${prefix}how 
-│${setv} ${prefix}rate 
-│${setv} ${prefix}cry 
-│${setv} ${prefix}kill 
-│${setv} ${prefix}hug 
-│${setv} ${prefix}pat 
-│${setv} ${prefix}lick  
-│${setv} ${prefix}kiss 
-│${setv} ${prefix}bite 
-│${setv} ${prefix}yeet 
-│${setv} ${prefix}bully 
-│${setv} ${prefix}bonk 
-│${setv} ${prefix}wink 
-│${setv} ${prefix}poke 
-│${setv} ${prefix}nom 
-│${setv} ${prefix}slap 
-│${setv} ${prefix}smile  
-│${setv} ${prefix}wave 
-│${setv} ${prefix}awoo 
-│${setv} ${prefix}blush 
-│${setv} ${prefix}smug 
-│${setv} ${prefix}glomp  
-│${setv} ${prefix}happy 
-│${setv} ${prefix}dance 
-│${setv} ${prefix}cringe 
-│${setv} ${prefix}cuddle 
-│${setv} ${prefix}highfive  
-│${setv} ${prefix}handhold 
-│${setv} ${prefix}spank 
-│${setv} ${prefix}tickle 
-│${setv} ${prefix}feed 
-│${setv} ${prefix}checkme 
-│${setv} ${prefix}sound1 - sound161 
-╰─┬────❍
-╭─┴❍「 *🖌️ Sticker* 」❍
-│${setv} ${prefix}goose 
-│${setv} ${prefix}woof 
-│${setv} ${prefix}8ball 
-│${setv} ${prefix}lizard 
-│${setv} ${prefix}meow 
-│${setv} ${prefix}gura 
-│${setv} ${prefix}telestick 
-╰─┬────❍
-╭─┴❍「 *🎌 Anime* 」❍
-│${setv} ${prefix}searchanime 
-│${setv} ${prefix}animeinfo  
-│${setv} ${prefix}animeid 
-│${setv} ${prefix}animedl 
-│${setv} ${prefix}searchmanga 
-│${setv} ${prefix}amv 
-│${setv} ${prefix}mangainfo 
-│${setv} ${prefix}searchchapter 
-│${setv} ${prefix}mangachapter 
-│${setv} ${prefix}mangachapter2 
-│${setv} ${prefix}randommanga 
-│${setv} ${prefix}stickhandhold 
-│${setv} ${prefix}stickshinobu 
-│${setv} ${prefix}stickcuddle 
-│${setv} ${prefix}stickhighfive 
-│${setv} ${prefix}stickdance 
-│${setv} ${prefix}stickcringe 
-│${setv} ${prefix}stickhappy 
-│${setv} ${prefix}stickglomp 
-│${setv} ${prefix}sticksmug 
-│${setv} ${prefix}stickblush 
-│${setv} ${prefix}stickawoo 
-│${setv} ${prefix}stickwave 
-│${setv} ${prefix}sticksmile 
-│${setv} ${prefix}stickslap 
-│${setv} ${prefix}stickpoke 
-│${setv} ${prefix}stickwink 
-│${setv} ${prefix}stickbonk 
-│${setv} ${prefix}stickbully 
-│${setv} ${prefix}stickyeet 
-│${setv} ${prefix}stickbike 
-│${setv} ${prefix}stickkiss 
-│${setv} ${prefix}sticklick 
-│${setv} ${prefix}stickpat 
-│${setv} ${prefix}stickhug 
-│${setv} ${prefix}stickkill 
-│${setv} ${prefix}stickcry 
-│${setv} ${prefix}stickspank 
-│${setv} ${prefix}sticktickle 
-│${setv} ${prefix}traceanime 
-│${setv} ${prefix}akira 
-│${setv} ${prefix}akiyama 
-│${setv} ${prefix}ana 
-│${setv} ${prefix}asuna 
-│${setv} ${prefix}ayuzawa 
-│${setv} ${prefix}boruto 
-│${setv} ${prefix}chiho 
-│${setv} ${prefix}chitoge 
-│${setv} ${prefix}cosplayloli 
-│${setv} ${prefix}cosplaysagiri 
-│${setv} ${prefix}deidara 
-│${setv} ${prefix}doraemon 
-│${setv} ${prefix}elaina 
-│${setv} ${prefix}emilia 
-│${setv} ${prefix}erza 
-│${setv} ${prefix}gremory 
-│${setv} ${prefix}hestia 
-│${setv} ${prefix}husbu 
-│${setv} ${prefix}inori 
-│${setv} ${prefix}isuzu 
-│${setv} ${prefix}itachi 
-│${setv} ${prefix}itori 
-│${setv} ${prefix}kaga 
-│${setv} ${prefix}kagura 
-│${setv} ${prefix}kakasih 
-│${setv} ${prefix}kaori 
-│${setv} ${prefix}keneki 
-│${setv} ${prefix}kotori 
-│${setv} ${prefix}kurumi 
-│${setv} ${prefix}loli 
-│${setv} ${prefix}loli2 
-│${setv} ${prefix}madara 
-│${setv} ${prefix}megumin 
-│${setv} ${prefix}mikasa 
-│${setv} ${prefix}mikey 
-│${setv} ${prefix}miku 
-│${setv} ${prefix}minato 
-│${setv} ${prefix}naruto 
-│${setv} ${prefix}neko 
-│${setv} ${prefix}nekonime 
-│${setv} ${prefix}nezuko 
-│${setv} ${prefix}onepiece 
-│${setv} ${prefix}pokemon 
-│${setv} ${prefix}randomnime 
-│${setv} ${prefix}randomnime2 
-│${setv} ${prefix}rize 
-│${setv} ${prefix}sagiri 
-│${setv} ${prefix}sakura 
-│${setv} ${prefix}sasuke 
-│${setv} ${prefix}shina 
-│${setv} ${prefix}shinka 
-│${setv} ${prefix}shinomiya 
-│${setv} ${prefix}shizuka 
-│${setv} ${prefix}shota 
-│${setv} ${prefix}tejina 
-│${setv} ${prefix}toukachan 
-│${setv} ${prefix}tsunade 
-│${setv} ${prefix}waifu 
-│${setv} ${prefix}waifu2 
-│${setv} ${prefix}animewall 
-│${setv} ${prefix}yotsuba 
-│${setv} ${prefix}yuki 
-│${setv} ${prefix}yulibocil 
-│${setv} ${prefix}yumeko 
-│${setv} ${prefix}8ball 
-│${setv} ${prefix}animeawoo 
-│${setv} ${prefix}animemegumin 
-│${setv} ${prefix}animeshinobu 
-│${setv} ${prefix}animehandhold 
-│${setv} ${prefix}animehighfive 
-│${setv} ${prefix}animecringe 
-│${setv} ${prefix}animedance 
-│${setv} ${prefix}animehappy 
-│${setv} ${prefix}animeglomp 
-│${setv} ${prefix}animeblush 
-│${setv} ${prefix}animesmug 
-│${setv} ${prefix}animewave 
-│${setv} ${prefix}animesmille 
-│${setv} ${prefix}animepoke 
-│${setv} ${prefix}animewink 
-│${setv} ${prefix}animebonk 
-│${setv} ${prefix}animebully 
-│${setv} ${prefix}animeyeet 
-│${setv} ${prefix}animebite 
-│${setv} ${prefix}animelick 
-│${setv} ${prefix}animekill 
-│${setv} ${prefix}animecry 
-│${setv} ${prefix}animewlp 
-│${setv} ${prefix}animekiss 
-│${setv} ${prefix}animehug 
-│${setv} ${prefix}animeneko 
-│${setv} ${prefix}animepat 
-│${setv} ${prefix}animeslap 
-│${setv} ${prefix}animecuddle 
-│${setv} ${prefix}animewaifu 
-│${setv} ${prefix}animenom 
-│${setv} ${prefix}animefoxgirl 
-│${setv} ${prefix}animegecg 
-│${setv} ${prefix}animetickle 
-│${setv} ${prefix}animefeed 
-│${setv} ${prefix}animeavatar 
-│${setv} ${prefix}anime 
-│${setv} ${prefix}avatar 
-│${setv} ${prefix}shinobu 
-│${setv} ${prefix}fox_girl 
-│${setv} ${prefix}gecg  
-╰─┬────❍
-╭─┴❍「 *Anime NSFW* 」❍
-│ *_Sorry USERS_*
-│ > NO NSFW MENU AVAILABLE
-╰─┬────❍
-╭─┴❍「 *💾 Database* 」❍
-│${setv} ${prefix}setcmd 
-│${setv} ${prefix}delcmd 
-│${setv} ${prefix}listcmd 
-│${setv} ${prefix}lockcmd 
-│${setv} ${prefix}addmsg 
-│${setv} ${prefix}delmsg 
-│${setv} ${prefix}getmsg 
-│${setv} ${prefix}listmsg 
-╰─┬────❍
-╭─┴❍「 *🛍️ Store* 」❍
-│${setv} ${prefix}list 
-│${setv} ${prefix}store 
-│${setv} ${prefix}shop 
-│${setv} ${prefix}addlist 
-│${setv} ${prefix}dellist 
-╰─┬────❍
-╭─┴❍「 *🛐 Religon* 」❍
-│${setv} ${prefix}bible 
-│${setv} ${prefix}quran 
-│${setv} ${prefix}gita 
-│${setv} ${prefix}namazchk 
-│${setv} ${prefix}prophetname 
-│${setv} ${prefix}prayertime 
-│${setv} ${prefix}sahihbukhari 
-│${setv} ${prefix}jamiattirmidhi 
-│${setv} ${prefix}sunanannasai 
-│${setv} ${prefix}sunanibnmajah 
-│${setv} ${prefix}sunanabudawud 
-│${setv} ${prefix}kisahnabi 
-│${setv} ${prefix}asmaulhusna 
-│${setv} ${prefix}duas 
-│${setv} ${prefix}namaz 
-│${setv} ${prefix}masnoonduas 
-│${setv} ${prefix}ayatalkursi 
-│${setv} ${prefix}niyatnamaz 
-│${setv} ${prefix}quotesislami 
-│${setv} ${prefix}assalamualaikum 
-╰─┬────❍
-╭─┴❍「 *⚙️ Other* 」❍
-│${setv} ${prefix}cricket 
-│${setv} ${prefix}score 
-│${setv} ${prefix}ping 
-│${setv} ${prefix}menu 
-│${setv} ${prefix}myip 
-│${setv} ${prefix}repo 
-│${setv} ${prefix}reportbug 
-│${setv} ${prefix}idgroup 
-│${setv} ${prefix}owner 
-│${setv} ${prefix}rentbot 
-│${setv} ${prefix}runtime 
-│${setv} ${prefix}confess 
-│${setv} ${prefix}react 
-│${setv} ${prefix}q 
-│${setv} ${prefix}inspect 
-│${setv} ${prefix}tagme 
-│${setv} ${prefix}nowa 
-│${setv} ${prefix}truecaller 
-╰──────❍`
-if (typemenu === 'v1') {
-  XliconBotInc.sendMessage(m.chat, {
-      image: fs.readFileSync('./XliconMedia/theme/XliconPic.jpg'),
-      caption: xmenu_oh
-  }, {
-      quoted: m
-  })
-} else if (typemenu === 'v2') {
-  XliconBotInc.sendMessage(m.chat, {
-      text: xmenu_oh,
-      contextInfo: {
-          externalAdReply: {
-              showAdAttribution: true,
-              title: botname,
-              body: ownername,
-              thumbnailUrl: 'https://images3.alphacoders.com/131/thumbbig-1319293.webp',
-              sourceUrl: wagc,
-              mediaType: 1,
-              renderLargerThumbnail: true
-          }
-      }
-  }, {
-      quoted: m
-  })
-} else if (typemenu === 'v3') {
-  XliconBotInc.sendMessage(m.chat, {
-      video: fs.readFileSync('./XliconMedia/theme/Xlicon-Video.mp4'),
-      caption: xmenu_oh
-  }, {
-      quoted: m
-  })
-} else if (typemenu === 'v4') {
-  XliconBotInc.sendMessage(m.chat, {
-      video: fs.readFileSync('./XliconMedia/theme/Xlicon-Video.mp4'),
-      caption: xmenu_oh,
-      gifPlayback: true
-  }, {
-      quoted: m
-  })
-} else if (typemenu === 'v5') {
-  XliconBotInc.relayMessage(m.chat, {
-      requestPaymentMessage: {
-          currencyCodeIso4217: 'USD',
-          amount1000: '9999999900',
-          requestFrom: m.sender,
-          noteMessage: {
-              extendedTextMessage: {
-                  text: xmenu_oh,
-                  contextInfo: {
-                      externalAdReply: {
-                          showAdAttribution: true
-                      }
-                  }
-              }
-          }
-      }
-  }, { quoted: m })
-} else if (typemenu === 'v6') {
-  XliconBotInc.sendMessage(m.chat, {
-      video: fs.readFileSync('./XliconMedia/theme/Xlicon-Video.mp4'),
-      gifPlayback: true,
-      caption: xmenu_oh,
-      contextInfo: {
-          externalAdReply: {
-              title: botname,
-              body: ownername,
-              thumbnailUrl: 'https://images3.alphacoders.com/131/thumbbig-1319293.webp',
-              sourceUrl: ``,
-              mediaType: 1,
-              renderLargerThumbnail: true
-          }
-      }
-  }, {
-      quoted: m
-  })
-} else if (typemenu === 'v7') {
-  XliconBotInc.sendMessage(m.chat, {
-      video: fs.readFileSync('./XliconMedia/theme/Xlicon-Video.mp4'),
-      caption: xmenu_oh,
-      gifPlayback: true,
-      contextInfo: {
-          forwardingScore: 999,
-          isForwarded: true,
-          mentionedJid: [sender],
-          forwardedNewsletterMessageInfo: {
-              newsletterName: ownername,
-              newsletterJid: "120363232303807350@newsletter",
-          },
-          externalAdReply: {
-              showAdAttribution: true,
-              title: ownername,
-              body: botname,
-              thumbnailUrl: "https://i.ibb.co/y0nLDSB/XLICON-IMG.jpg",
-              sourceUrl: websitex,
-              mediaType: 1,
-              renderLargerThumbnail: true
-          }
-      }
-  }, {
-      quoted: m
-  })
+
+case 'menu': {
+  try {
+      const createImage = async (url) => {
+          const { imageMessage } = await baileys.generateWAMessageContent({
+              image: { url }
+          }, {
+              upload: XliconBotInc.waUploadToServer
+          });
+          return imageMessage;
+      };
+
+
+        async function pinterest(query) {
+            let res = await fetch(`https://www.pinterest.com/resource/BaseSearchResource/get/?source_url=%2Fsearch%2Fpins%2F%3Fq%3D${query}&data=%7B%22options%22%3A%7B%22isPrefetch%22%3Afalse%2C%22query%22%3A%22${query}%22%2C%22scope%22%3A%22pins%22%2C%22no_fetch_context_on_resource%22%3Afalse%7D%2C%22context%22%3A%7B%7D%7D&_=1619980301559`);
+            let json = await res.json();
+            let data = json.resource_response.data.results;
+            if (!data.length) return m.reply(`Query "${query}" not found :/`);
+            return data[~~(Math.random() * data.length)].images.orig.url;
+        }
+
+        const menuItems = [
+
+      ];
+
+      // Add the Group Menu items
+     menuItems.push(`╭─┴❍「 🛡️ GROUP 」❍
+│ antibot
+│ antiviewonce
+│ readviewonce
+│ welcome
+│ adminevent
+│ groupevent
+│ antiforeign
+│ antimedia
+│ antiaudio
+│ antivideo
+│ antiimage
+│ antidocument
+│ antilocation
+│ anticontact
+│ antisticker
+│ antipoll
+│ antilink
+│ antipromotion
+│ antivirtex
+│ grouplink
+│ listadmin
+│ invite
+│ ephemeral
+│ delete
+│ setppgroup
+│ delppgroup
+│ setnamegc
+│ setdesc
+│ add
+│ kick
+│ promote
+│ demote
+│ kickall
+│ promoteall
+│ demoteall
+│ getcontact
+│ savecontact
+│ sendcontact
+│ contactag
+│ hidetag
+│ totag
+│ tagall
+│ editinfo
+│ opentime
+│ closetime
+│ resetlink
+│ getbio
+│ vote
+│ upvote
+│ downvote
+│ checkvote
+│ delvote
+│ antivirus
+│ antibadword
+│ nsfw
+│ react
+│ getjoinrequest
+╰──────❍
+`);
+
+      // Add the Search Menu items
+      menuItems.push(`╭─┴❍「 *🔍 Search* 」❍
+│ google
+│ wikipedia
+│ ytsearch
+│ apksearch
+│ stickersearch
+│ imdb
+│ wanumber
+│ friend
+│ lyrics
+│ pixiv
+╰──────❍
+
+╭─┴❍「 🧠 GAME 」❍
+│ truth
+│ dare
+│ suit
+│ tictactoe
+│ math
+│ playbomb
+│ casino
+│ rob
+│ slot
+│ dice
+│ profile
+│ claim
+│ tmoney
+│ tflimit
+╰──────❍
+
+╭─┴❍「 🧠 OpenAI 」❍
+│ blackboxai
+│ travel-assistant
+│ realistic
+│ mangaimg
+│ animeimg
+│ lexica
+│ chechkgpt
+│ 3dmodel
+│ photoleap
+│ chatgpt4
+│ darky
+│ bing
+│ mathsai
+│ openai
+│ dalle
+│ stablediffusion
+│ ai
+│ remini
+╰──────❍
+
+
+
+
+
+
+
+
+
+
+`);
+
+      // Add the Download Menu items
+      menuItems.push(`╭─┴❍「 🛡️ DOWNLOAD 」❍
+│ itunes
+│ play
+│ play2
+│ ytplay-termux
+│ ytmp3-termux
+│ ytmp4-termux
+│ yta
+│ ytv
+│ yta2
+│ ytv2
+│ image
+│ gimage
+│ live-wallpaper
+│ tiktok
+│ tiktokaudio
+│ tiktokvideo
+│ likee
+│ capcut
+│ instagram
+│ igimg
+│ facebook
+│ twitter
+│ apk
+│ bilibili
+│ dailymotion
+│ mega
+│ mediafire
+│ searchsoundcloud
+│ soundcloud
+│ google
+│ gimage
+│ weather
+│ gitclone
+│ happymod
+│ gdrive
+│ pinterest
+│ pindl
+│ ringtone
+│ autodownload
+╰──────❍
+
+╭─┴❍「📋LISTMENU」❍
+│listprem
+│listowner
+│liststicker
+│listimage
+│listvideo
+│listvn
+│listapk
+│listzip
+│listpdf
+│listbadword
+│listpc
+│listgc
+╰──────❍
+
+
+
+
+`);
+
+      // Add the Tool Menu items
+      menuItems.push(`╭─┴❍「 🛠️ TOOL MENU 」❍
+│ obfuscate
+│ styletext
+│ fliptext
+│ tts
+│ say
+│ togif
+│ toqr
+│ bass
+│ blown
+│ deep
+│ earrape
+│ fast
+│ fat
+│ nightcore
+│ reverse
+│ robot
+│ slow
+│ smooth
+│ squirrel
+│ tinyurl
+│ tovn
+│ toptv
+│ toaudio
+│ tomp3
+│ tomp4
+│ toimg
+│ toonce
+│ toptv
+│ sticker
+│ smeme
+│ smeta
+│ take
+│ emojimix
+│ volaudio
+│ volvideo
+│ ebinary
+│ dbinary
+│ ssweb
+│ quoted
+│ translate
+│ get
+│ tourl
+│ write
+╰──────❍
+
+╭─┴❍「 🎥 RANDOM VIDEO 」❍
+│tiktokgirl
+│tiktoknukthy
+│tiktokkayes
+│tiktokpanrika
+│tiktoknotnot
+│tiktokghea
+│tiktoksantuy
+│tiktokbocil
+╰──────❍
+
+
+
+`);
+
+      // Add the List Menu items
+      menuItems.push(`╭─┴❍「 📋 RANDOM PHOTO」❍
+│ aesthetic
+│ coffee
+│ wikimedia
+│ wallpaper
+│ art
+│ bts
+│ dogwoof
+│ catmeow
+│ lizardpic
+│ goosebird
+│ 8ballpool
+│ cosplay
+│ hacker
+│ cyber
+│ gamewallpaper
+│ islamic
+│ jennie
+│ jiso
+│ satanic
+│ justina
+│ cartoon
+│ pentol
+│ cat
+│ kpop
+│ exo
+│ lisa
+│ space
+│ car
+│ technology
+│ bike
+│ shortquote
+│ antiwork
+│ hacking
+│ boneka
+│ rose
+│ ryujin
+│ ulzzangboy
+│ ulzzanggirl
+│ wallml
+│ wallphone
+│ mountain
+│ goose
+│ profilepic
+│ couplepp
+│ programming
+│ pubg
+│ blackpink
+│ randomboy
+│ randomgirl
+│ hijab
+│ chinese
+│ indo
+│ japanese
+│ korean
+│ malay
+│ thai
+│ vietnamese
+╰──────❍`);
+        
+
+menuItems.push(`╭─┴❍「 🎉 Fun 」❍
+│define
+│readmore
+│yomamajoke
+│fact
+│couple
+│soulmate
+│stupidcheck
+│handsomecheck
+│uncleancheck
+│hotcheck
+│smartcheck
+│greatcheck
+│evilcheck
+│dogcheck
+│coolcheck
+│waifucheck
+│awesomecheck
+│gaycheck
+│cutecheck
+│lesbiancheck
+│hornycheck
+│prettycheck
+│lovelycheck
+│uglycheck
+│pick
+│pickupline
+│quotes
+│can
+│is
+│when
+│where
+│what
+│how
+│rate
+│cry
+│kill
+│hug
+│pat
+│lick
+│kiss
+│bite
+│yeet
+│bully
+│bonk
+│wink
+│poke
+│nom
+│slap
+│smile
+│wave
+│awoo
+│blush
+│smug
+│glomp
+│happy
+│dance
+│cringe
+│cuddle
+│highfive`);
+
+  menuItems.push(`│handhold
+│spank
+│tickle
+│feed
+│checkme
+│sound1 - sound161
+╰──────❍
+
+╭─┴❍「 🎥 RANDOM VIDEO 」❍
+│tiktokstalk
+│mlstalk
+│npmstalk
+│ghstalk
+│telestalk
+│wachannelstalk
+╰──────❍
+
+╭─┴❍「 🖼️ Sticker 」❍
+│goose
+│woof
+│8ball
+│lizard
+│meow
+│gura
+│telestick
+╰──────❍
+
+╭─┴❍「 🌸 *Anime* 」❍
+│searchanime
+│animeinfo
+│animeid
+│animedl
+│mangainfo
+│searchchapter
+│mangachapter
+│mangachapter2
+│randommanga
+│amv
+│stickhandhold
+│stickshinobu
+│stickcuddle
+│stickhighfive
+│stickdance
+│stickcringe
+│stickhappy
+│stickglomp
+│sticksmug
+│stickblush
+│stickawoo
+│stickwave
+│sticksmile
+│stickslap
+│stickpoke
+│stickwink
+│stickbonk
+│stickbully
+│stickyeet
+│stickbike
+│stickkiss
+ `);
+
+
+    menuItems.push(`│sticklick
+│stickpat
+│stickhug
+│stickkill
+│stickcry
+│stickspank
+│sticktickle
+│traceanime
+│akira
+│akiyama
+│ana
+│asuna
+│ayuzawa
+│boruto
+│chiho
+│chitoge
+│cosplayloli
+│cosplaysagiri
+│deidara
+│doraemon
+│elaina
+│emilia
+│erza
+│gremory
+│hestia
+│husbu
+│inori
+│isuzu
+│itachi
+│itori
+│kaga
+│kagura
+│kakasih
+│kaori
+│keneki
+│kotori
+│kurumi
+│loli
+│loli2
+│madara
+│megumin
+│mikasa
+│mikey
+│miku
+│minato
+│naruto
+│neko
+│nekonime
+│nezuko
+│onepiece
+│pokemon
+│randomnime
+│randomnime2
+│rize
+│sagiri
+│sakura
+│sasuke
+│shina
+│shinka
+│shinomiya
+`);
+
+
+      menuItems.push(`│shizuka
+│shota
+│tejina
+│toukachan
+│tsunade
+│waifu
+│waifu2
+│animewall
+│yotsuba
+│yuki
+│yulibocil
+│yumeko
+│8ball
+│animeawoo
+│animemegumin
+│animeshinobu
+│animehandhold
+│animehighfive
+│animecringe
+│animedance
+│animehappy
+│animeglomp
+│animeblush
+│animesmug
+│animewave
+│animesmille
+│animepoke
+│animewink
+│animebonk
+│animebully
+│animeyeet
+│animebite
+│animelick
+│animekill
+│animecry
+│animewlp
+│animekiss
+│animehug
+│animeneko
+│animepat
+│animeslap
+│animecuddle
+│animewaifu
+│animenom
+│animefoxgirl
+│animegecg
+│animetickle
+│animefeed
+│animeavatar
+│anime
+│avatar
+│shinobu
+│fox_girl
+│gecg
+╰──────❍
+
+╭─┴❍「 🔥 *NSFW* 」❍
+│hentai 
+│xnxxsearch 
+│xvideosearch 
+│xnxxdl`);
+
+        menuItems.push(`│xvideodl 
+│gifblowjob 
+│hentaivid 
+│hneko 
+│nwaifu 
+│animespank 
+│trap 
+│blowjob 
+│cuckold 
+│milf 
+│eba 
+│pussy 
+│yuri 
+│zettai 
+╰──────❍
+
+╭─┴❍「 💾 *Database* 」❍
+│setcmd
+│delcmd
+│listcmd
+│lockcmd
+│addmsg
+│delmsg
+│getmsg
+│listmsg
+╰──────❍
+
+╭─┴❍「 🛒 *Store* 」❍
+│list
+│store
+│shop
+│addlist
+│dellist
+╰──────❍
+
+
+
+╭─┴❍「 ✝️ *Religion* 」❍
+│bible
+│quran
+│gita
+│namazchk
+│prophetname
+│prayertime
+│sahihbukhari
+│jamiattirmidhi
+│sunanannasai
+│sunanibnmajah
+│sunanabudawud
+│kisahnabi
+│asmaulhusna
+│duas
+│namaz
+│masnoonduas
+│ayatalkursi
+│niyatnamaz
+│quotesislami
+│assalamualaikum
+╰──────❍
+`);
+        menuItems.push(`╭─┴❍「 🛠️ *Other* 」❍
+│update 
+│cricket 
+│score 
+│ping 
+│menu 
+│myip 
+│repo 
+│reportbug 
+│idgroup 
+│owner 
+│rentbot 
+│donate 
+│runtime 
+│confess 
+│react 
+│q 
+│inspect 
+│tagme 
+│nowa 
+│truecaller 
+╰──────❍
+            `);
+      
+        
+
+        const imageUrls = await Promise.all(menuItems.map(() => pinterest('anime menu icon')));
+
+        const cards = await Promise.all(imageUrls.map(async (url, index) => ({
+            header: proto.Message.InteractiveMessage.Header.fromObject({
+                title: `${menuItems[index]}`,
+                hasMediaAttachment: true,
+                imageMessage: await createImage(url)
+            }),
+            nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.fromObject({
+                buttons: []
+            })
+        })));
+
+        const msg = baileys.generateWAMessageFromContent(m.chat, {
+            viewOnceMessage: {
+                message: {
+                    messageContextInfo: {
+                        deviceListMetadata: {},
+                        deviceListMetadataVersion: 2
+                    },
+                    interactiveMessage: proto.Message.InteractiveMessage.fromObject({
+                        body: proto.Message.InteractiveMessage.Body.fromObject({
+                            text: `All Menus\n> Swipe to view all menus`
+                        }),
+                        carouselMessage: proto.Message.InteractiveMessage.CarouselMessage.fromObject({
+                            cards
+                        })
+                    })
+                }
+            }
+        }, {});
+
+        await XliconBotInc.relayMessage(msg.key.remoteJid, msg.message, {
+            messageId: msg.key.id
+        });
+
+        m.reply('Above are all the available menus. Use the specific menu command to see detailed options.');
+      } catch (error) {
+        console.error('Error in allmenu command:', error);
+        m.reply('An error occurred while processing the allmenu command.');
+    }
 }
-}
-break
+break;
+
 
 case 'ownermenu': {
 let xmenu_oh = `
